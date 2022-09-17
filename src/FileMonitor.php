@@ -44,6 +44,9 @@ class FileMonitor
     /** @var string Периодичность проверки. Варианты: daily, hourly */
     private $period;
 
+    /** @var bool Принудительный запуск мониторинга */
+    private $force;
+
     private $fileMonitor = '/file-monitor.txt';
     private $fileMonitorTmp = '/file-monitor-tmp.txt';
     private $fileMonitorUpd = '/file-monitor-upd.txt';
@@ -52,9 +55,10 @@ class FileMonitor
      * Устанавливает время начала работы скрипта и список файлов/каталогов для исключения из сбора.
      * @throws \Exception
      */
-    public function __construct($settings)
+    public function __construct(array $settings, bool $force)
     {
         $this->startTime = microtime(true);
+        $this->force = $force;
 
         $defaultValues = array(
             'scanDir' => null,
@@ -103,7 +107,7 @@ class FileMonitor
     public function scan()
     {
         // Проверка, создан ли файл с хэшами
-        if (file_exists($this->fileMonitor)) {
+        if (file_exists($this->fileMonitor) && !$this->force) {
             $time = filemtime($this->fileMonitor);
             if ($this->period === 'daily' && date('d.m.Y') === date('d.m.Y', $time)) {
                 echo "Файлы сегодня уже проверялись.\n";
