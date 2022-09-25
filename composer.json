@@ -2,6 +2,7 @@
     "name": "idealcms/file-monitor",
     "description": "",
     "homepage": "https://github.com/idealcms/file-monitor",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Paul Nikitin",
